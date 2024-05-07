@@ -1,0 +1,37 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: graalvm-example
+  labels:
+    app: graalvm-example
+spec:
+  type: ClusterIP
+  selector:
+    app: graalvm-example
+  ports:
+    - name: tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: graalvm-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: graalvm-example
+  template:
+    metadata:
+      labels:
+        app: graalvm-example
+        version: v1
+    spec:
+      containers:
+        - name: graalvm-example
+          image: graalvm-example
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
